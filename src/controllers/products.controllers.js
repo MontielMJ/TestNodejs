@@ -8,7 +8,7 @@ export const getProducts = async (req, res) => {
     res.json(result.recordset);
 
 }
-
+ 
 export const getProduct = async (req, res) => {
     const pool = await getConnection()
     const result = await pool
