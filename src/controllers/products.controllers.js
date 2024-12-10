@@ -39,12 +39,12 @@ export const createProduct = async (req, res) => {
         .input("quantity", sql.Int, req.body.quantity)
         .input("price", sql.Decimal, req.body.price)
         .query("INSERT INTO products (name,description,quantity,price)VALUES(@name, @description, @quantity, @price); SELECT SCOPE_IDENTITY() AS id");
-    res.json({
+    res.json({message:"success", data:{
         id: result.recordset[0].id,
         name: req.body.name,
         description: req.body.description,
         quantity: req.body.quantity,
-        price: req.body.price
+        price: req.body.price}
     });
 }
 
