@@ -33,7 +33,6 @@ export const getCards = async (req, res) => {
         const client = await clientMongo();
         // Verificar si la conexión fue exitosa
         if (client) {
-            //console.log("Conexión exitosa:", client);
             // Aquí puedes interactuar con la base de datos
             const db = client.db('Store_DB');  // Ejemplo: accediendo a la base de datos Store_DB
             const users = await db.collection('Cards').find().toArray();  // Obtener las tarjetas (ajusta según tu esquema)

@@ -1,5 +1,10 @@
 import { clientMongo } from '../database/connectionMongoDB.js'
 import { ObjectId, UUID } from 'mongodb';
+import jwt from "jsonwebtoken";
+
+
+
+const JWT_SECRET = process.env.JWT_SECRET || "minuevacontraseñajwt"
 
 // Controlador para obtener usuarios
 export const getUsers = async (req, res) => {
@@ -118,3 +123,45 @@ try {
 }
 
 };
+
+// Ruta para login
+export const loginUser =  async(req, res) => {
+    try {
+        // Obtener el cliente Mongo desde la función
+        const client = await clientMongo();
+        // Verificar si la conexión fue exitosa
+        if (client) {
+            const db = client.db('Store_DB');  // Ejemplo: accediendo a la base de datos Store_DB
+            const email =req.body.email;
+            const password =req.body.password;
+            const query = { "email": email, "password": password };  
+           
+            console.log("query:", JSON.stringify(query));
+
+            if (query.email == null || query.password == null) {
+                return res.status(400).json({ message: "Los campos 'email' y 'password' son requeridos."});
+            }
+
+            const users = await db.collection('Users').findOne(query);  // Obtener los usuarios (ajusta según tu esquema)
+            client.close();
+
+            if(users != null){
+                 // Genera un token JWT
+                const token = jwt.sign({ id: users._id, username: users.name }, JWT_SECRET, {
+                expiresIn: "1h" // El token expira en 1 hora
+                });
+            
+                res.json({ isSuccess: true, token });
+            }
+             else{
+                return res.status(401).json({ isSuccess:false , message: "usuario o password Invalido."});
+             }
+            // Enviar la lista de usuarios como respuesta
+            //res.json(users);
+        } else {
+            res.status(500).json({ isSuccess:false , message:  "No se pudo conectar a MongoDB" });
+        }
+    } catch (error) {
+        res.status(500).json({ isSuccess:false , message:  "Error al obtener los usuarios" });
+    }
+  };
