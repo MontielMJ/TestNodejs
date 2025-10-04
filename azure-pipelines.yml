@@ -4,18 +4,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+- main   # o la rama que uses
 
 pool:
-  vmImage: ubuntu-latest
+  name: 'Default'   # cámbialo por el pool donde registraste tu agente
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+- script: echo "Hello World desde el agente Windows 🎉"
+  displayName: 'Mensaje de prueba'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+- script: dir
+  displayName: 'Listar archivos en el workspace'
