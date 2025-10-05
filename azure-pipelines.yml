@@ -7,15 +7,33 @@ trigger:
 - main
 
 pool:
-  name: 'Default'   # cámbialo por el pool donde registraste tu agente
+  name: 'Default'   # o el nombre del pool donde tienes tu agente
 
 steps:
+# 1️⃣ Instalar Node.js
 - task: NodeTool@0
   inputs:
     versionSpec: '20.x'
-  displayName: 'Install Node.js'
+  displayName: 'Instalar Node.js 20.x'
 
+# 2️⃣ Instalar dependencias y construir
 - script: |
-    npm install
+    npm ci
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Instalar dependencias y compilar'
+
+# 3️⃣ Ejecutar pruebas unitarias (opcional)
+- script: |
+    npm test
+  displayName: 'Ejecutar pruebas'
+  continueOnError: true   # Cambia a false si quieres que el pipeline falle en caso de error
+
+# 4️⃣ Iniciar servidor Express y verificar respuesta
+- script: |
+    echo "Iniciando servidor Express en segundo plano..."
+    start /B node dist/server.js
+    echo "Esperando que el servidor levante..."
+    timeout /t 5 >nul
+    echo "Validando endpoint..."
+    powershell -Command "try { $r = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing; if ($r.StatusCode -eq 200) { Write-Host '✅ Servidor Express levantado correctamente' } else { Write-Error '❌ Código inesperado: ' + $r.StatusCode; exit 1 } } catch { Write-Error '❌ No se pudo acceder al servidor Express'; exit 1 }"
+  displayName: 'Probar servidor Express'
