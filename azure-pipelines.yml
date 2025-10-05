@@ -22,6 +22,11 @@ steps:
     npm run build
   displayName: 'Instalar dependencias y compilar'
 
+- powershell: |
+    Write-Host "Directorio actual: $PWD"
+    Write-Host "SourcesDirectory: $(Build.SourcesDirectory)"
+  displayName: 'Mostrar rutas de trabajo'
+
 # 4️⃣ Iniciar servidor Express y validar que responde
 - powershell: |
     Write-Host "Iniciando servidor Express..."
@@ -41,3 +46,4 @@ steps:
       exit 1
     }
   displayName: 'Probar servidor Express'
+  workingDirectory: '$(Build.SourcesDirectory)'
