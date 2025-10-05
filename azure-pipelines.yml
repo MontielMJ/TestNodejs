@@ -45,21 +45,42 @@ steps:
   
 # 4️⃣ Iniciar servidor Express y validar que responde
 - powershell: |
-    Write-Host "Iniciando servidor Express..."
-    Start-Process "node" "$(Build.SourcesDirectory)/src/index.js"
-    Write-Host "Esperando que el servidor levante..."
-    Start-Sleep -Seconds 20
-    try {
-      $response = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing
-      if ($response.StatusCode -eq 200) {
-        Write-Host "✅ Servidor Express levantado correctamente"
-      } else {
-        Write-Error "❌ Código inesperado: $($response.StatusCode)"
+    Write-Host "=== 🚀 Iniciando servidor Express ==="
+    Write-Host "Ejecutando desde: $PWD"
+
+    # Arranca el servidor en segundo plano
+    $nodePath = "$(Build.SourcesDirectory)\src\index.js"
+    Write-Host "Ejecutando: node $nodePath"
+    Start-Process "node.exe" $nodePath -PassThru | Out-Null
+
+    Write-Host "⏳ Esperando 10 segundos para que el servidor levante..."
+    Start-Sleep -Seconds 10
+
+    # Verificar si el proceso node está activo
+    $node = Get-Process node -ErrorAction SilentlyContinue
+    if (-not $node) {
+        Write-Error "❌ El proceso Node no está corriendo. Revisa si tu app tiene errores al iniciar."
         exit 1
-      }
-    } catch {
-      Write-Error "❌ No se pudo acceder al servidor Express"
-      exit 1
     }
-  displayName: 'Probar servidor Express'
+
+    # Intentar acceder al servidor
+    Write-Host "🌐 Validando http://localhost:3000"
+    try {
+        $response = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing -TimeoutSec 10
+        if ($response.StatusCode -eq 200) {
+            Write-Host "✅ Servidor Express levantado correctamente"
+        } else {
+            Write-Error "❌ Respuesta inesperada: $($response.StatusCode)"
+            exit 1
+        }
+    } catch {
+        Write-Error "❌ No se pudo acceder al servidor Express: $($_.Exception.Message)"
+        exit 1
+    }
+
+    # Detener el proceso Node
+    Write-Host "🧹 Deteniendo servidor..."
+    Stop-Process -Name node -Force
+    Write-Host "✅ Servidor detenido correctamente."
+  displayName: '🚀 Iniciar y validar servidor Express'
   workingDirectory: '$(Build.SourcesDirectory)'
