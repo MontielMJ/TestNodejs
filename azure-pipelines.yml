@@ -79,8 +79,8 @@ steps:
     }
 
     # Detener el proceso Node
-    Write-Host "🧹 Deteniendo servidor..."
-    Stop-Process -Name node -Force
-    Write-Host "✅ Servidor detenido correctamente."
+    # Write-Host "🧹 Deteniendo servidor..."
+    # Stop-Process -Name node -Force
+    # Write-Host "✅ Servidor detenido correctamente."
   displayName: '🚀 Iniciar y validar servidor Express'
   workingDirectory: '$(Build.SourcesDirectory)'
