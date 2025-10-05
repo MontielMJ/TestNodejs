@@ -1,4 +1,5 @@
 export class Card{
+    id:string;
     titular : string;
     numeroTarjeta :string;
     fechaExpiracion : Date;

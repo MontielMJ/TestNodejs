@@ -128,6 +128,7 @@ try {
 export const loginUser =  async(req, res) => {
     try {
         // Obtener el cliente Mongo desde la función
+        debugger;
         const client = await clientMongo();
         // Verificar si la conexión fue exitosa
         if (client) {

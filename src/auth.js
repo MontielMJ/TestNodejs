@@ -11,10 +11,11 @@ export const verifyToken = (req, res, next) => {
   
     // 2. Extraer el token del encabezado
     const token = authHeader.split(" ")[1];
-    if (!token) {
+
+    if (token === "null") {   
+   
       return res.status(401).json({ message: "Formato de token inválido" });
     }
-  
     // 3. Validar el token
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
@@ -26,3 +27,4 @@ export const verifyToken = (req, res, next) => {
       next();
     });
   };
+  
