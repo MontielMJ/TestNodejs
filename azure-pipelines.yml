@@ -30,7 +30,7 @@ steps:
 # 4️⃣ Iniciar servidor Express y validar que responde
 - powershell: |
     Write-Host "Iniciando servidor Express..."
-    Start-Process "node" "src/index.js"
+    Start-Process "node" "$(Build.SourcesDirectory)\src\index.js"
     Write-Host "Esperando que el servidor levante..."
     Start-Sleep -Seconds 10
     try {
