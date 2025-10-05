@@ -3,7 +3,6 @@ import { getConnection } from "./database/connections.js";
 
 
 //getConnection();
-
-app.listen(3000)
-console.log("Servidor iniciado ");
-
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Servidor escuchando en el puerto 3000');
+});
