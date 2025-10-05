@@ -28,10 +28,10 @@ steps:
   displayName: 'Ejecutar pruebas'
   continueOnError: true   # Cambia a false si quieres que el pipeline falle en caso de error
 
-# 4️⃣ Iniciar servidor Express y verificar respuesta
+# 4️⃣ Iniciar servidor Express y validar que responde
 - script: |
     echo "Iniciando servidor Express en segundo plano..."
-    start /B node dist/server.js
+    start /B node src/index.js
     echo "Esperando que el servidor levante..."
     timeout /t 5 >nul
     echo "Validando endpoint..."
