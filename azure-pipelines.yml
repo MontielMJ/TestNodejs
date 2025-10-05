@@ -27,6 +27,22 @@ steps:
     Write-Host "SourcesDirectory: $(Build.SourcesDirectory)"
   displayName: 'Mostrar rutas de trabajo'
 
+- powershell: |
+    Write-Host "=== 🔍 Diagnóstico de entorno del agente ==="
+    Write-Host "Usuario actual: $env:USERNAME"
+    Write-Host "Directorio actual: $PWD"
+    Write-Host "Directorio raíz del agente: $env:AGENT_ROOTDIRECTORY"
+    Write-Host "SourcesDirectory: $(Build.SourcesDirectory)"
+    Write-Host "BinariesDirectory: $(Build.BinariesDirectory)"
+    Write-Host "ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
+    Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
+    Write-Host "Build.Repository.LocalPath: $(Build.Repository.LocalPath)"
+    Write-Host "Archivos descargados en:"
+    Get-ChildItem -Path "$(Build.SourcesDirectory)" -Recurse -Depth 2 | Select-Object FullName
+    Write-Host "==========================================="
+  displayName: '🧭 Diagnóstico de rutas y entorno'
+  workingDirectory: '$(Build.SourcesDirectory)'
+  
 # 4️⃣ Iniciar servidor Express y validar que responde
 - powershell: |
     Write-Host "Iniciando servidor Express..."
