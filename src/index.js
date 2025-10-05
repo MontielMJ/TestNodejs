@@ -10,3 +10,7 @@ app.listen(3000, '0.0.0.0', () => {
 app.get('/', (req, res) => {
   res.send('Servidor Express OK');
 });
+// --- IGNORE ---
+//app.listen(3000) --- IGNORE ---
+//console.log("Servidor iniciado "); --- IGNORE ---
+// --- IGNORE ---
