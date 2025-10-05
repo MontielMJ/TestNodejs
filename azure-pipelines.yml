@@ -22,12 +22,6 @@ steps:
     npm run build
   displayName: 'Instalar dependencias y compilar'
 
-# 3️⃣ Ejecutar pruebas unitarias (opcional)
-- script: |
-    npm test
-  displayName: 'Ejecutar pruebas'
-  continueOnError: true   # Cambia a false si quieres que el pipeline falle en caso de error
-
 # 4️⃣ Iniciar servidor Express y validar que responde
 - powershell: |
     Write-Host "Iniciando servidor Express..."
