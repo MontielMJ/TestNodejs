@@ -29,11 +29,21 @@ steps:
   continueOnError: true   # Cambia a false si quieres que el pipeline falle en caso de error
 
 # 4️⃣ Iniciar servidor Express y validar que responde
-- script: |
-    echo "Iniciando servidor Express en segundo plano..."
-    start /B node src/index.js
-    echo "Esperando que el servidor levante..."
-    timeout /t 5 >nul
-    echo "Validando endpoint..."
-    powershell -Command "try { $r = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing; if ($r.StatusCode -eq 200) { Write-Host '✅ Servidor Express levantado correctamente' } else { Write-Error '❌ Código inesperado: ' + $r.StatusCode; exit 1 } } catch { Write-Error '❌ No se pudo acceder al servidor Express'; exit 1 }"
+- powershell: |
+    Write-Host "Iniciando servidor Express..."
+    Start-Process "node" "src/index.js"
+    Write-Host "Esperando que el servidor levante..."
+    Start-Sleep -Seconds 10
+    try {
+      $response = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing
+      if ($response.StatusCode -eq 200) {
+        Write-Host "✅ Servidor Express levantado correctamente"
+      } else {
+        Write-Error "❌ Código inesperado: $($response.StatusCode)"
+        exit 1
+      }
+    } catch {
+      Write-Error "❌ No se pudo acceder al servidor Express"
+      exit 1
+    }
   displayName: 'Probar servidor Express'
