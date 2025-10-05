@@ -64,9 +64,9 @@ steps:
     }
 
     # Intentar acceder al servidor
-    Write-Host "🌐 Validando http://localhost:3000"
+    Write-Host "🌐 Validando http://localhost:3000/"
     try {
-        $response = Invoke-WebRequest 'http://localhost:3000' -UseBasicParsing -TimeoutSec 10
+        $response = Invoke-WebRequest 'http://localhost:3000/' -UseBasicParsing -TimeoutSec 10
         if ($response.StatusCode -eq 200) {
             Write-Host "✅ Servidor Express levantado correctamente"
         } else {
